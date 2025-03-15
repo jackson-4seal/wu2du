@@ -48,4 +48,8 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
+    from . import lists
+
+    app.register_blueprint(lists.bp)
+
     return app

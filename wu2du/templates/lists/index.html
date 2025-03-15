@@ -1,0 +1,17 @@
+{% extends base.html %}
+
+{% block header %}
+<h1>{% block title %}My Lists{% endblock %}</h1>
+{% if g.user %}
+<a class="action" href="{{ url_for('blog.create') }}">+ New List</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="tablists">
+    {% for list in lists %}
+    <div class="listselector">{{ list.title }}</div>
+    {% endfor %}
+</div>
+
+{% endblock %}
