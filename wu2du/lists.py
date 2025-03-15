@@ -23,4 +23,9 @@ def index():
         " FROM item i JOIN list l ON i.list_id = l.id"
         " ORDER BY complete DESC"
     ).fetchall()
-    return render_template("lists/index.html", lists=lists, items=items)
+    return render_template(
+        "lists/index.html",
+        lists=lists,
+        items=items,
+        width=100 / len(lists),
+    )

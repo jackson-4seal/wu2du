@@ -8,10 +8,30 @@
 {% endblock %}
 
 {% block content %}
+<!-- TODO: actually do SQL queries -->
+<!-- list of all lists belonging to the user -->
+<!-- should probably be a div with a selection <a> tag and a deletion <a> tag -->
 <div class="tablists">
     {% for list in lists %}
+    {% if list.id == items[0].list_id %}
+    <div class="listselector currentlist" style="width: {{ width }}%;">{{ list.title }}</div>
+    {% else %}
     <div class="listselector">{{ list.title }}</div>
+    {% endif %}
     {% endfor %}
+</div>
+
+<!-- Create elements for all todo list items for the current list -->
+<!-- should it be id or class list? -->
+<!-- dynamically assigning classes somehow could reduce redundancy like the if else statements below -->
+<!-- or maybe better placed if statements. maybe inside the div creation? -->
+<div class="list">
+    {% for item in items %}
+    {% if item.complete == True %}
+    <div class="complete-item">{{ item.body }}</div>
+    {% else %}
+    <div class="incomplete-item">{{ item.body }}</div>
+    {% endif %}
 </div>
 
 {% endblock %}
