@@ -1,9 +1,9 @@
-{% extends base.html %}
+{% extends 'base.html' %}
 
 {% block header %}
 <h1>{% block title %}My Lists{% endblock %}</h1>
 {% if g.user %}
-<a class="action" href="{{ url_for('blog.create') }}">+ New List</a>
+<a class="action" href="{{ url_for('lists.createlist') }}">+ New List</a>
 {% endif %}
 {% endblock %}
 
@@ -12,13 +12,37 @@
 <!-- list of all lists belonging to the user -->
 <!-- should probably be a div with a selection <a> tag and a deletion <a> tag -->
 <div class="tablists">
+    {% if items %}
     {% for list in lists %}
     {% if list.id == items[0].list_id %}
-    <div class="listselector currentlist" style="width: {{ width }}%;">{{ list.title }}</div>
+    <div class="listselector currentlist" style="width: {{ width }}%;">
+        <a href="{{ url_for('lists.index', list_id=list.id)}}">{{ list.title }}</a>
+        <form action="{{ url_for('lists.delete', list_id=list.id)}}" method="post">
+            <input type="submit" value="X">
+        </form>
+    </div>
     {% else %}
-    <div class="listselector">{{ list.title }}</div>
+    <div class="listselector" style="width: {{ width }}%;">
+        <a href="{{ url_for('lists.index', list_id=list.id)}}">{{ list.title }}</a>
+        <form action="{{ url_for('lists.delete', list_id=list.id)}}" method="post">
+            <input type="submit" value="X">
+        </form>
+        <!-- <a href="{{ url_for('lists.delete', list_id=list.id)}}" method="post">X</a> -->
+    </div>
     {% endif %}
     {% endfor %}
+    {% else %}
+
+    {% for list in lists %}
+    <div class="listselector" style="width: {{ width }}%;">
+        <a href="{{ url_for('lists.index', list_id=list.id)}}">{{ list.title }}</a>
+        <form action="{{ url_for('lists.delete', list_id=list.id)}}" method="post">
+            <input type="submit" value="X">
+        </form>
+    </div>
+    {% endfor %}
+
+    {% endif %}
 </div>
 
 <!-- Create elements for all todo list items for the current list -->
@@ -26,11 +50,14 @@
 <!-- dynamically assigning classes somehow could reduce redundancy like the if else statements below -->
 <!-- or maybe better placed if statements. maybe inside the div creation? -->
 <div class="list">
+    {% if items %}
     {% for item in items %}
     {% if item.complete == True %}
     <div class="complete-item">{{ item.body }}</div>
     {% else %}
     <div class="incomplete-item">{{ item.body }}</div>
+    {% endif %}
+    {% endfor %}
     {% endif %}
 </div>
 
