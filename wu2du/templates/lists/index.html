@@ -14,17 +14,17 @@
 <div class="tablists">
     {% if items %}
     {% for list in lists %}
-    {% if list.id == items[0].list_id %}
+    {% if list.id == current_list %}
     <div class="listselector currentlist" style="width: {{ width }}%;">
-        <a href="{{ url_for('lists.index', list_id=list.id)}}">{{ list.title }}</a>
-        <form action="{{ url_for('lists.delete', list_id=list.id)}}" method="post">
+        <a href="{{ url_for('lists.index', list_id=list.id) }}">{{ list.title }}</a>
+        <form action="{{ url_for('lists.delete', list_id=list.id) }}" method="post">
             <input type="submit" value="X">
         </form>
     </div>
     {% else %}
     <div class="listselector" style="width: {{ width }}%;">
-        <a href="{{ url_for('lists.index', list_id=list.id)}}">{{ list.title }}</a>
-        <form action="{{ url_for('lists.delete', list_id=list.id)}}" method="post">
+        <a href="{{ url_for('lists.index', list_id=list.id) }}">{{ list.title }}</a>
+        <form action="{{ url_for('lists.delete', list_id=list.id) }}" method="post">
             <input type="submit" value="X">
         </form>
         <!-- <a href="{{ url_for('lists.delete', list_id=list.id)}}" method="post">X</a> -->
@@ -35,8 +35,8 @@
 
     {% for list in lists %}
     <div class="listselector" style="width: {{ width }}%;">
-        <a href="{{ url_for('lists.index', list_id=list.id)}}">{{ list.title }}</a>
-        <form action="{{ url_for('lists.delete', list_id=list.id)}}" method="post">
+        <a href="{{ url_for('lists.index', list_id=list.id) }}">{{ list.title }}</a>
+        <form action="{{ url_for('lists.delete', list_id=list.id) }}" method="post">
             <input type="submit" value="X">
         </form>
     </div>
@@ -49,14 +49,38 @@
 <!-- should it be id or class list? -->
 <!-- dynamically assigning classes somehow could reduce redundancy like the if else statements below -->
 <!-- or maybe better placed if statements. maybe inside the div creation? -->
+<h2></h2>
+
 <div class="list">
+    {% if current_list %}
+    <h3 id="listheader">{{ lists[0].title }}</h3>
+    <div id="newitem">
+        <a href="{{ url_for('lists.listappend', list_id=current_list) }}">+ New Task</a>
+    </div>
+    {% endif %}
+
     {% if items %}
     {% for item in items %}
+
     {% if item.complete == True %}
+
+    <form action="{{ url_for('lists.changestatus', task_id=item.id, list_id=item.list_id, completed=item.complete) }}" method="post">
+        <input class="complete-circle" type="submit" value="O">
+    </form>
     <div class="complete-item">{{ item.body }}</div>
+
     {% else %}
+
+    <form action="{{ url_for('lists.changestatus', task_id=item.id, completed=item.complete, list_id=item.list_id,) }}" method="post">
+        <input class="incomplete-circle" type="submit" value="O">
+    </form>
     <div class="incomplete-item">{{ item.body }}</div>
+
     {% endif %}
+    <form action="{{ url_for('lists.deletetask', task_id=item.id, list_id=item.list_id) }}" method="post">
+        <input type="submit" value="X">
+    </form>
+
     {% endfor %}
     {% endif %}
 </div>
